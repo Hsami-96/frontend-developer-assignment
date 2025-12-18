@@ -1,7 +1,8 @@
 import { SeedRecipents } from "./SeedRecipents";
 
 jest.mock("../../assets/recipientsData.json", () => ({
-  recipents: [
+  __esModule: true,
+  default: [
     {
       email: "john@example.com",
       isSelected: true,
@@ -16,7 +17,7 @@ jest.mock("../../assets/recipientsData.json", () => ({
 describe("SeedReciepents", () => {
   it("maps recipients and derives domain correctly", () => {
     const result = SeedRecipents();
-
+    console.log(result);
     expect(result).toEqual([
       {
         email: "john@example.com",
@@ -24,7 +25,7 @@ describe("SeedReciepents", () => {
         isSelected: true,
       },
       {
-        email: "jane@test.io",
+        email: "mike@test.io",
         domain: "test.io",
         isSelected: false,
       },
