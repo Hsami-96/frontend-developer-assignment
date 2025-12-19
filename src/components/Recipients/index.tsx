@@ -4,7 +4,8 @@ import { AvailableCard } from "./AvailableRecipents";
 import { SelectedCard } from "./SelectedRecipents";
 
 export const Recipients = () => {
-  const { availableGrouped, selectedGrouped, toggleSelected } = useRecipents();
+  const { availableGrouped, selectedGrouped, toggleRecipient, toggleDomain } =
+    useRecipents();
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center">
@@ -17,13 +18,15 @@ export const Recipients = () => {
           {/* Available */}
           <AvailableCard
             availableGrouped={availableGrouped}
-            toggleSelected={toggleSelected}
+            toggleRecipient={toggleRecipient}
+            toggleDomain={toggleDomain}
           />
 
           {/* Selected */}
           <SelectedCard
             selectedGrouped={selectedGrouped}
-            toggleSelected={toggleSelected}
+            toggleRecipient={toggleRecipient}
+            toggleDomain={toggleDomain}
           />
         </div>
       </div>

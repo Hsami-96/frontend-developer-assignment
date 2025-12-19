@@ -3,6 +3,7 @@ import { GroupedRecipients, Recipient } from "../../../types/recipient";
 import { SeedRecipents } from "../../../utils/recipients/SeedRecipents";
 import { toggleRecipent } from "./logic/toggleRecipient";
 import { groupByDomain } from "./logic/groupByDomain";
+import { toggleDomainRecipent } from "./logic/toggleDomainRecipient";
 
 export const useRecipents = () => {
   const [recipents, setRecipents] = useState<Recipient[]>(() =>
@@ -26,9 +27,14 @@ export const useRecipents = () => {
     [selectedRecipients]
   );
 
-  const toggleSelected = (email: string) => {
+  const toggleRecipient = (email: string) => {
+    console.log("*** email ", email);
     setRecipents((prev) => toggleRecipent(prev, email));
   };
 
-  return { availableGrouped, selectedGrouped, toggleSelected };
+  const toggleDomain = (domain: string) => {
+    setRecipents((prev) => toggleDomainRecipent(prev, domain));
+  };
+
+  return { availableGrouped, selectedGrouped, toggleRecipient, toggleDomain };
 };
