@@ -1,5 +1,5 @@
-import { ReactComponent as TimescaleLogo } from "../assets/logo.svg";
+import { Recipients } from "./Recipients";
 
-const App = () => <TimescaleLogo />;
+const App = () => <Recipients />;
 
 export default App;
