@@ -1,29 +1,34 @@
 import { useMemo, useState } from "react";
 import { Recipient } from "../../../types/recipient";
 import { SeedRecipents } from "../../../utils/recipients/SeedRecipents";
+import { toggleRecipent } from "./logic/toggleRecipient";
+import { groupByDomain } from "./logic/groupByDomain";
 
 export const useRecipents = () => {
-  const [recipents] = useState<Recipient[]>(() => SeedRecipents());
+  const [recipents, setRecipents] = useState<Recipient[]>(() =>
+    SeedRecipents()
+  );
 
-  const { groupedByDomain, singleRecipients } = useMemo(() => {
-    const mappedRecipents: Record<string, Recipient[]> = {};
-    for (const r of recipents) {
-      mappedRecipents[r.domain] ??= [];
-      mappedRecipents[r.domain].push(r);
-    }
+  const availableRecipients = recipents.filter(
+    (recipent) => !recipent.isSelected
+  );
+  const selectedRecipients = recipents.filter(
+    (recipent) => recipent.isSelected
+  );
 
-    const groupedByDomain: Record<string, Recipient[]> = {};
-    const singleRecipients: Recipient[] = [];
+  const availableGrouped = useMemo(
+    () => groupByDomain(availableRecipients),
+    [availableRecipients]
+  );
 
-    for (const [domain, domainRecipents] of Object.entries(mappedRecipents)) {
-      if (domainRecipents.length > 1) {
-        groupedByDomain[domain] = domainRecipents;
-      } else {
-        singleRecipients.push(domainRecipents[0]);
-      }
-    }
-    return { groupedByDomain, singleRecipients };
-  }, [recipents]);
+  const selectedGrouped = useMemo(
+    () => groupByDomain(selectedRecipients),
+    [selectedRecipients]
+  );
 
-  return { recipents, groupedByDomain, singleRecipients };
+  const toggleSelected = (email: string) => {
+    setRecipents((prev) => toggleRecipent(prev, email));
+  };
+
+  return { availableGrouped, selectedGrouped, toggleSelected };
 };

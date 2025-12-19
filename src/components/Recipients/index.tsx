@@ -2,32 +2,78 @@ import React from "react";
 import { useRecipents } from "./hooks/useRecipients";
 
 export const Recipients = () => {
-  const { groupedByDomain, singleRecipients } = useRecipents();
+  const { availableGrouped, selectedGrouped, toggleSelected } = useRecipents();
+
   return (
-    <div data-testid="recipients-container" style={{ padding: "2rem" }}>
-      <h2>Recipients</h2>
+    <div
+      data-testid="recipients-container"
+      style={{ padding: "2rem", display: "flex", gap: "3rem" }}
+    >
+      <section style={{ flex: 1 }}>
+        <h3>Available Recipients</h3>
 
-      {Object.entries(groupedByDomain).map(([domain, recs]) => (
-        <div key={domain} style={{ marginBottom: "1rem" }}>
-          <h3>{domain}</h3>
+        {Object.entries(availableGrouped.groupedByDomain).map(
+          ([domain, recipients]) => (
+            <div key={domain} style={{ marginBottom: "1rem" }}>
+              <h4>{domain}</h4>
+              <ul>
+                {recipients.map((recipient) => (
+                  <li key={recipient.email}>
+                    <button onClick={() => toggleSelected(recipient.email)}>
+                      {recipient.email}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        )}
+
+        {availableGrouped.singleRecipients.length > 0 && (
           <ul>
-            {recs.map((r) => (
-              <li key={r.email}>{r.email}</li>
+            {availableGrouped.singleRecipients.map((recipient) => (
+              <li key={recipient.email}>
+                <button onClick={() => toggleSelected(recipient.email)}>
+                  {recipient.email}
+                </button>
+              </li>
             ))}
           </ul>
-        </div>
-      ))}
+        )}
+      </section>
 
-      {singleRecipients.length > 0 && (
-        <div>
-          <h3>Other Recipients</h3>
+      <section style={{ flex: 1 }}>
+        <h3>Selected Recipients</h3>
+
+        {Object.entries(selectedGrouped.groupedByDomain).map(
+          ([domain, recipients]) => (
+            <div key={domain} style={{ marginBottom: "1rem" }}>
+              <h4>{domain}</h4>
+              <ul>
+                {recipients.map((recipient) => (
+                  <li key={recipient.email}>
+                    <button onClick={() => toggleSelected(recipient.email)}>
+                      {recipient.email}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        )}
+
+        {selectedGrouped.singleRecipients.length > 0 && (
           <ul>
-            {singleRecipients.map((r) => (
-              <li key={r.email}>{r.email}</li>
+            {selectedGrouped.singleRecipients.map((recipient) => (
+              <li key={recipient.email}>
+                <button onClick={() => toggleSelected(recipient.email)}>
+                  {recipient.email}
+                </button>
+              </li>
             ))}
           </ul>
-        </div>
-      )}
+        )}
+      </section>
     </div>
   );
 };

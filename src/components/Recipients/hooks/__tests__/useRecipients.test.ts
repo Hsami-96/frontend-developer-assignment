@@ -3,22 +3,30 @@ import { useRecipents } from "../useRecipients";
 import { SeedRecipents } from "../../../../utils/recipients/SeedRecipents";
 
 describe("useRecipents hook", () => {
-  it("should load recipents from SeedRecipents", () => {
+  it("returns available recipents grouped by domain", () => {
     const { result } = renderHook(() => useRecipents());
 
     const seededRecipents = SeedRecipents();
+    const availableCount =
+      Object.values(result.current.availableGrouped.groupedByDomain).flat()
+        .length + result.current.availableGrouped.singleRecipients.length;
 
-    expect(result.current.recipents).toEqual(seededRecipents);
+    const expectedAvailable = seededRecipents.filter(
+      (recipent) => !recipent.isSelected
+    ).length;
+    expect(availableCount).toEqual(expectedAvailable);
   });
 
-  it("should correctly group recipients by domain", () => {
+  it("returns selected recipents grouped by domain", () => {
     const { result } = renderHook(() => useRecipents());
 
-    const { groupedByDomain, singleRecipients } = result.current;
-    console.log(groupedByDomain);
+    const selectedCount =
+      Object.values(result.current.selectedGrouped.groupedByDomain).flat()
+        .length + result.current.selectedGrouped.singleRecipients.length;
 
-    const totalCount =
-      Object.values(groupedByDomain).flat().length + singleRecipients.length;
-    expect(totalCount).toBe(result.current.recipents.length);
+    const expectedSelected = SeedRecipents().filter((recipent) => recipent.isSelected).length;
+    console.log("*** selected: ", selectedCount);
+    console.log("*** expected: ", expectedSelected);
+    expect(selectedCount).toBe(expectedSelected);
   });
 });
