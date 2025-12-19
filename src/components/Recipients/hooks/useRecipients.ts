@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Recipient } from "../../../types/recipient";
+import { GroupedRecipients, Recipient } from "../../../types/recipient";
 import { SeedRecipents } from "../../../utils/recipients/SeedRecipents";
 import { toggleRecipent } from "./logic/toggleRecipient";
 import { groupByDomain } from "./logic/groupByDomain";
@@ -16,12 +16,12 @@ export const useRecipents = () => {
     (recipent) => recipent.isSelected
   );
 
-  const availableGrouped = useMemo(
+  const availableGrouped: GroupedRecipients = useMemo(
     () => groupByDomain(availableRecipients),
     [availableRecipients]
   );
 
-  const selectedGrouped = useMemo(
+  const selectedGrouped: GroupedRecipients = useMemo(
     () => groupByDomain(selectedRecipients),
     [selectedRecipients]
   );

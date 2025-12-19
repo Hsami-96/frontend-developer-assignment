@@ -1,79 +1,32 @@
 import React from "react";
 import { useRecipents } from "./hooks/useRecipients";
+import { AvailableCard } from "./AvailableRecipents";
+import { SelectedCard } from "./SelectedRecipents";
 
 export const Recipients = () => {
   const { availableGrouped, selectedGrouped, toggleSelected } = useRecipents();
 
   return (
-    <div
-      data-testid="recipients-container"
-      style={{ padding: "2rem", display: "flex", gap: "3rem" }}
-    >
-      <section style={{ flex: 1 }}>
-        <h3>Available Recipients</h3>
+    <div className="min-h-screen bg-slate-100 flex items-center justify-center">
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
 
-        {Object.entries(availableGrouped.groupedByDomain).map(
-          ([domain, recipients]) => (
-            <div key={domain} style={{ marginBottom: "1rem" }}>
-              <h4>{domain}</h4>
-              <ul>
-                {recipients.map((recipient) => (
-                  <li key={recipient.email}>
-                    <button onClick={() => toggleSelected(recipient.email)}>
-                      {recipient.email}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )
-        )}
+      {/* Main container */}
+      <div className="relative w-full max-w-6xl rounded-2xl bg-white shadow-2xl p-6">
+        <div className="grid grid-cols-2 gap-6">
+          {/* Available */}
+          <AvailableCard
+            availableGrouped={availableGrouped}
+            toggleSelected={toggleSelected}
+          />
 
-        {availableGrouped.singleRecipients.length > 0 && (
-          <ul>
-            {availableGrouped.singleRecipients.map((recipient) => (
-              <li key={recipient.email}>
-                <button onClick={() => toggleSelected(recipient.email)}>
-                  {recipient.email}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <section style={{ flex: 1 }}>
-        <h3>Selected Recipients</h3>
-
-        {Object.entries(selectedGrouped.groupedByDomain).map(
-          ([domain, recipients]) => (
-            <div key={domain} style={{ marginBottom: "1rem" }}>
-              <h4>{domain}</h4>
-              <ul>
-                {recipients.map((recipient) => (
-                  <li key={recipient.email}>
-                    <button onClick={() => toggleSelected(recipient.email)}>
-                      {recipient.email}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )
-        )}
-
-        {selectedGrouped.singleRecipients.length > 0 && (
-          <ul>
-            {selectedGrouped.singleRecipients.map((recipient) => (
-              <li key={recipient.email}>
-                <button onClick={() => toggleSelected(recipient.email)}>
-                  {recipient.email}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+          {/* Selected */}
+          <SelectedCard
+            selectedGrouped={selectedGrouped}
+            toggleSelected={toggleSelected}
+          />
+        </div>
+      </div>
     </div>
   );
 };

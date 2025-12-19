@@ -3,3 +3,8 @@ export type Recipient = {
   domain: string;
   isSelected: boolean;
 };
+
+export type GroupedRecipients = {
+  groupedByDomain: Record<string, Recipient[]>;
+  singleRecipients: Recipient[];
+};
