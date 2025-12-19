@@ -9,6 +9,7 @@ export const useRecipents = () => {
   const [recipents, setRecipents] = useState<Recipient[]>(() =>
     SeedRecipents()
   );
+  const [search, setSearch] = useState("");
 
   const availableRecipients = recipents.filter(
     (recipent) => !recipent.isSelected
@@ -17,9 +18,21 @@ export const useRecipents = () => {
     (recipent) => recipent.isSelected
   );
 
+  const filteredAvailable = useMemo(() => {
+    if (!search.trim()) return availableRecipients;
+
+    const query = search.toLowerCase();
+
+    return availableRecipients.filter(
+      (recipient) =>
+        recipient.email.toLowerCase().includes(query) ||
+        recipient.domain.includes(query)
+    );
+  }, [availableRecipients, search]);
+
   const availableGrouped: GroupedRecipients = useMemo(
-    () => groupByDomain(availableRecipients),
-    [availableRecipients]
+    () => groupByDomain(filteredAvailable),
+    [filteredAvailable]
   );
 
   const selectedGrouped: GroupedRecipients = useMemo(
@@ -36,5 +49,12 @@ export const useRecipents = () => {
     setRecipents((prev) => toggleDomainRecipent(prev, domain));
   };
 
-  return { availableGrouped, selectedGrouped, toggleRecipient, toggleDomain };
+  return {
+    availableGrouped,
+    selectedGrouped,
+    toggleRecipient,
+    toggleDomain,
+    search,
+    setSearch,
+  };
 };
