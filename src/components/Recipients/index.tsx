@@ -10,6 +10,8 @@ export const Recipients = () => {
     toggleDomain,
     search,
     setSearch,
+    addRecipent,
+    suggestions,
   } = useRecipents();
 
   return (
@@ -29,6 +31,8 @@ export const Recipients = () => {
             toggleDomain={toggleDomain}
             search={search}
             setSearch={setSearch}
+            addRecipient={addRecipent}
+            suggestions={suggestions}
           />
 
           {/* Selected */}

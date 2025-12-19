@@ -1,6 +1,7 @@
-import { GroupedRecipients } from "../../../types/recipient";
+import { GroupedRecipients, Recipient } from "../../../types/recipient";
 import { DomainRecipients } from "../DomainRecipients";
 import { RecipientItem } from "../RecipientItem";
+import { AutocompleteDropdown } from "./AutocompleteDropdown";
 
 interface AvailableCardProps {
   availableGrouped: GroupedRecipients;
@@ -8,6 +9,8 @@ interface AvailableCardProps {
   toggleDomain: (domain: string) => void;
   search: string;
   setSearch: (value: string) => void;
+  addRecipient: (email: string) => any[];
+  suggestions: Recipient[];
 }
 export const AvailableCard = ({
   availableGrouped,
@@ -15,6 +18,8 @@ export const AvailableCard = ({
   toggleDomain,
   search,
   setSearch,
+  addRecipient,
+  suggestions,
 }: AvailableCardProps) => {
   console.log(availableGrouped);
   return (
@@ -31,6 +36,18 @@ export const AvailableCard = ({
             className="w-full rounded-full border border-slate-300 bg-white py-2 pl-10 pr-4 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+          />
+          <AutocompleteDropdown
+            search={search}
+            suggestions={suggestions}
+            onSelect={(email) => {
+              toggleRecipient(email);
+              setSearch("");
+            }}
+            onAdd={(email) => {
+              addRecipient(email);
+              setSearch("");
+            }}
           />
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
             🔍

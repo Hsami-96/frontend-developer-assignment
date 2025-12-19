@@ -4,6 +4,7 @@ import { SeedRecipents } from "../../../utils/recipients/SeedRecipents";
 import { toggleRecipent } from "./logic/toggleRecipient";
 import { groupByDomain } from "./logic/groupByDomain";
 import { toggleDomainRecipent } from "./logic/toggleDomainRecipient";
+import { isEmailValid } from "./logic/isEmailValid";
 
 export const useRecipents = () => {
   const [recipents, setRecipents] = useState<Recipient[]>(() =>
@@ -30,6 +31,16 @@ export const useRecipents = () => {
     );
   }, [availableRecipients, search]);
 
+  const suggestions = useMemo(() => {
+    if (!search.trim()) return [];
+
+    const query = search.toLowerCase();
+
+    return availableRecipients.filter((recipent) =>
+      recipent.email.toLowerCase().includes(query)
+    );
+  }, [availableRecipients, search]);
+
   const availableGrouped: GroupedRecipients = useMemo(
     () => groupByDomain(filteredAvailable),
     [filteredAvailable]
@@ -49,6 +60,27 @@ export const useRecipents = () => {
     setRecipents((prev) => toggleDomainRecipent(prev, domain));
   };
 
+  const addRecipent = (email: string) => {
+    if (!isEmailValid(email)) return [];
+
+    const emailExists = recipents.some(
+      (recipent) => recipent.email.toLowerCase() === email.toLowerCase()
+    );
+
+    if (emailExists) return;
+
+    const domain = email.split("@")[1];
+
+    setRecipents((prev) => [
+      ...prev,
+      {
+        email,
+        domain,
+        isSelected: false,
+      },
+    ]);
+  };
+
   return {
     availableGrouped,
     selectedGrouped,
@@ -56,5 +88,7 @@ export const useRecipents = () => {
     toggleDomain,
     search,
     setSearch,
+    addRecipent,
+    suggestions,
   };
 };
