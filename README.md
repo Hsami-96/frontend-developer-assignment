@@ -37,7 +37,8 @@ As a user, I can
 
 ### 🎥 Demo
 
-> _Demo video coming soon_
+
+https://github.com/user-attachments/assets/f34df256-8731-4eef-b35f-97ca0aa96a70
 
 ---
 
